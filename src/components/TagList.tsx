@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import fetchTags from "../utils/fetchTags";
 import { setTags } from "../store/listSlice";
 import compare from "../utils/compareStringsOrNumbers";
+import Tag from "./Tag";
 const TagList = () => {
   const dispatch = useAppDispatch();
   const tags = useAppSelector((state) => state.list.tags);
@@ -24,12 +25,9 @@ const TagList = () => {
   );
 
   return (
-    <div className="overflow-scroll h-[100%] w-[100vw]">
-      {sorted.map((el) => (
-        <div>
-          <p>{el.name}</p>
-          <p>{el.count}</p>
-        </div>
+    <div className="overflow-y-scroll h-[100%] w-[100vw] p-8 flex flex-wrap gap-4">
+      {sorted.map((el, i) => (
+        <Tag tag={el} index={(currentPage - 1) * itemsPerPage + (i + 1)} />
       ))}
     </div>
   );

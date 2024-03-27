@@ -1,16 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-type Tag = {
+
+export type Tag = {
   name: string;
-  count: number;
+  popularity: number;
   hasSynonyms: boolean;
-  isModeratorOnly: boolean;
+  isRequired: boolean;
 };
+
 interface initialStateType {
   tags: Tag[];
   page: number;
   itemsPerPage: number;
   sorting: "desc" | "asc";
-  sortBy: "count" | "name";
+  sortBy: "popularity" | "name";
 }
 
 const initialState: initialStateType = {
@@ -27,7 +29,12 @@ const listSlice = createSlice({
   reducers: {
     setTags: (state, action) => {
       console.log(action.payload);
-      state.tags = action.payload;
+      state.tags = action.payload.map((el: any) => ({
+        name: el.name,
+        popularity: el.count,
+        hasSynonyms: el.has_synonyms,
+        isRequired: el.is_moderator_only,
+      }));
     },
     setSortBy: (state, action) => {
       state.sortBy = action.payload;

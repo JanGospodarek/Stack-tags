@@ -3,7 +3,9 @@ import { Input, Select, SelectItem, Switch } from "@nextui-org/react";
 import { ArrowCircleDown, ArrowCircleUp } from "@phosphor-icons/react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setItemsPerPage, setSortBy, setSortingType } from "../store/listSlice";
-const fields = ["count", "name"];
+
+const fields = ["popularity", "name"];
+
 const Filtering = () => {
   const dispatch = useAppDispatch();
   const itemsPerPage = useAppSelector((state) => state.list.itemsPerPage);
