@@ -18,16 +18,17 @@ const TagList = () => {
     })();
   }, [currentPage, itemsPerPage]);
 
-  const sorted = [...tags].sort((a, b) =>
-    compare(a[sortBy], b[sortBy], sorting)
+  const sorted = useMemo(
+    () => [...tags].sort((a, b) => compare(a[sortBy], b[sortBy], sorting)),
+    [tags, sortBy, sorting]
   );
 
   return (
-    <div>
+    <div className="overflow-scroll h-[100%] w-[100vw]">
       {sorted.map((el) => (
         <div>
           <p>{el.name}</p>
-          <p>{el.popular}</p>
+          <p>{el.count}</p>
         </div>
       ))}
     </div>

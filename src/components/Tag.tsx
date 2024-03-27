@@ -1,4 +1,10 @@
-const Tag = () => {
-  return <h1>Stack Overflow Tags</h1>;
+const Tag = (props: { name: string; popular: number }) => {
+  const { name, popular } = props;
+  return (
+    <div>
+      <p>{name}</p>
+      <p>{popular}</p>
+    </div>
+  );
 };
 export default Tag;
