@@ -4,7 +4,7 @@ import listSlice from "./listSlice";
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      ui: listSlice,
+      list: listSlice,
     },
   });
 };
