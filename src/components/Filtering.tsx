@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Input, Select, SelectItem, Switch } from "@nextui-org/react";
 import { ArrowCircleDown, ArrowCircleUp } from "@phosphor-icons/react";
-const fields = ["none", "count", "name"];
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setItemsPerPage, setSortBy, setSortingType } from "../store/listSlice";
+const fields = ["none", "popular", "name"];
 const Filtering = () => {
-  const [numberPerPage, setNumberPerPage] = useState(30);
-  const [isSelected, setIsSelected] = useState(false);
-
+  const dispatch = useAppDispatch();
+  const itemsPerPage = useAppSelector((state) => state.list.itemsPerPage);
+  const sortBy = useAppSelector((state) => state.list.sortBy);
+  const sorting = useAppSelector((state) => state.list.sorting);
   return (
     <div className="w-1/2 flex gap-4  px-8">
       <div className="flex items-center gap-2">
@@ -16,8 +19,8 @@ const Filtering = () => {
           min={10}
           max={80}
           step={10}
-          value={String(numberPerPage)}
-          onChange={(e) => setNumberPerPage(parseInt(e.target.value))}
+          value={String(itemsPerPage)}
+          onChange={(e) => dispatch(setItemsPerPage(parseInt(e.target.value)))}
           className="w-16"
         ></Input>
       </div>
@@ -28,6 +31,8 @@ const Filtering = () => {
           placeholder="Sort by"
           className="w-[100px] dark"
           variant="bordered"
+          selectedKeys={[sortBy]}
+          onChange={(e) => dispatch(setSortBy(e.target.value))}
         >
           {fields.map((field) => (
             <SelectItem key={field}>{field}</SelectItem>
@@ -37,8 +42,8 @@ const Filtering = () => {
           defaultSelected
           size="lg"
           color="secondary"
-          isSelected={isSelected}
-          onValueChange={setIsSelected}
+          isSelected={sorting === "desc"}
+          onValueChange={(e) => dispatch(setSortingType(e ? "desc" : "asc"))}
           thumbIcon={({ isSelected, className }) =>
             isSelected ? (
               <ArrowCircleDown size={32} className={className} />
@@ -47,7 +52,7 @@ const Filtering = () => {
             )
           }
         >
-          {isSelected ? "Desc" : "Asc"}
+          {sorting[0].toUpperCase() + sorting.slice(1)}
         </Switch>
       </div>
       <div className="flex items-center gap-2"></div>

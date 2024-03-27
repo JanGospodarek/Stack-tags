@@ -1,20 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 type Tag = {
   name: string;
-  count: number;
+  popular: number;
 };
 interface initialStateType {
   tags: Tag[];
-  sortedTags: Tag[];
   page: number;
   itemsPerPage: number;
+  sorting: "desc" | "asc";
+  sortBy: "popular" | "name";
 }
 
 const initialState: initialStateType = {
   tags: [],
-  sortedTags: [],
   page: 1,
   itemsPerPage: 30,
+  sorting: "desc",
+  sortBy: "name",
 };
 
 const listSlice = createSlice({
@@ -24,9 +26,27 @@ const listSlice = createSlice({
     setTags: (state, action) => {
       state.tags = action.payload;
     },
+    setSortBy: (state, action) => {
+      state.sortBy = action.payload;
+    },
+    setSortingType: (state, action) => {
+      state.sorting = action.payload;
+    },
+    setItemsPerPage: (state, action) => {
+      state.itemsPerPage = action.payload;
+    },
+    setPageNumber: (state, action) => {
+      state.page = action.payload;
+    },
   },
 });
 
-export const { setTags } = listSlice.actions;
+export const {
+  setTags,
+  setItemsPerPage,
+  setPageNumber,
+  setSortBy,
+  setSortingType,
+} = listSlice.actions;
 
 export default listSlice.reducer;
