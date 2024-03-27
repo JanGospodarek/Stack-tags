@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { NextUIProvider } from "@nextui-org/react";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -10,10 +12,12 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <NextUIProvider>
-      <main className="dark text-foreground bg-background">
-        <App />
-      </main>
-    </NextUIProvider>
+    <Provider store={store}>
+      <NextUIProvider>
+        <main className="dark text-foreground bg-background">
+          <App />
+        </main>
+      </NextUIProvider>
+    </Provider>
   </React.StrictMode>
 );
