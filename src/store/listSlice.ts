@@ -5,6 +5,7 @@ export type Tag = {
   popularity: number;
   hasSynonyms: boolean;
   isRequired: boolean;
+  page: number;
 };
 
 interface initialStateType {
@@ -28,13 +29,22 @@ const listSlice = createSlice({
   initialState,
   reducers: {
     setTags: (state, action) => {
-      console.log(action.payload);
-      state.tags = action.payload.map((el: any) => ({
-        name: el.name,
-        popularity: el.count,
-        hasSynonyms: el.has_synonyms,
-        isRequired: el.is_moderator_only,
-      }));
+      state.tags = [
+        ...state.tags,
+        ...action.payload
+          .map((el: any) => ({
+            name: el.name,
+            popularity: el.count,
+            hasSynonyms: el.has_synonyms,
+            isRequired: el.is_moderator_only,
+            page: state.page,
+          }))
+          .filter(
+            (el: Tag) =>
+              state.tags.findIndex((tag) => tag.name === el.name) === -1
+          ),
+      ];
+      console.log("state.tags", state.tags);
     },
     setSortBy: (state, action) => {
       state.sortBy = action.payload;
@@ -48,6 +58,9 @@ const listSlice = createSlice({
     setPageNumber: (state, action) => {
       state.page = action.payload;
     },
+    resetTags: (state) => {
+      state.tags = [];
+    },
   },
 });
 
@@ -57,6 +70,7 @@ export const {
   setPageNumber,
   setSortBy,
   setSortingType,
+  resetTags,
 } = listSlice.actions;
 
 export default listSlice.reducer;
