@@ -12,6 +12,7 @@ interface initialStateType {
   tags: Tag[];
   page: number;
   itemsPerPage: number;
+  hasMore: boolean;
   sorting: "desc" | "asc";
   sortBy: "popularity" | "name";
 }
@@ -22,6 +23,7 @@ const initialState: initialStateType = {
   itemsPerPage: 30,
   sorting: "desc",
   sortBy: "name",
+  hasMore: true,
 };
 
 const listSlice = createSlice({
@@ -29,9 +31,11 @@ const listSlice = createSlice({
   initialState,
   reducers: {
     setTags: (state, action) => {
+      console.log(action.payload);
+      state.hasMore = action.payload.hasMore;
       state.tags = [
         ...state.tags,
-        ...action.payload
+        ...action.payload.tags
           .map((el: any) => ({
             name: el.name,
             popularity: el.count,
@@ -41,10 +45,12 @@ const listSlice = createSlice({
           }))
           .filter(
             (el: Tag) =>
-              state.tags.findIndex((tag) => tag.name === el.name) === -1
+              state.tags.findIndex(
+                (tag) =>
+                  tag.name === el.name && el.popularity === tag.popularity
+              ) === -1
           ),
       ];
-      console.log("state.tags", state.tags);
     },
     setSortBy: (state, action) => {
       state.sortBy = action.payload;

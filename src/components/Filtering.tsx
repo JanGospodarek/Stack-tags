@@ -11,6 +11,21 @@ const Filtering = () => {
   const itemsPerPage = useAppSelector((state) => state.list.itemsPerPage);
   const sortBy = useAppSelector((state) => state.list.sortBy);
   const sorting = useAppSelector((state) => state.list.sorting);
+  const [error, setError] = useState<boolean>(false);
+  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value === "") {
+      setError(true);
+      return;
+    }
+    const parsedValue = parseInt(value);
+    if (parsedValue < 10 || parsedValue > 100) {
+      setError(true);
+      return;
+    }
+    setError(false);
+    dispatch(setItemsPerPage(parsedValue));
+  };
   return (
     <div className="w-1/2 flex gap-4  px-8">
       <div className="flex items-center gap-2">
@@ -22,8 +37,9 @@ const Filtering = () => {
           max={80}
           step={10}
           value={String(itemsPerPage)}
-          onChange={(e) => dispatch(setItemsPerPage(parseInt(e.target.value)))}
+          onChange={handleItemsPerPageChange}
           className="w-16"
+          color={error ? "danger" : "primary"}
         ></Input>
       </div>
       <div className="flex items-center gap-2">

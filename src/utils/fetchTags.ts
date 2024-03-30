@@ -10,6 +10,8 @@ const fetchTags = async (
     `https://api.stackexchange.com/2.3/tags?page=${page}&pagesize=${itemsPerPage}&order=${order}&sort=${orderBy}&site=stackoverflow`
   );
   const data = await res.json();
-  return data.items;
+  console.log(data);
+  if (data.error_message) throw new Error(data.error_message);
+  return [data.items, data.has_more];
 };
 export default fetchTags;

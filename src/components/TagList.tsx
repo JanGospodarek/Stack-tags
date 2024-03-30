@@ -17,50 +17,37 @@ const TagList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getTags = async () => {
-    // const resTags = await fetchTags(currentPage, itemsPerPage, sorting, sortBy);
-    setLoading(true);
-
-    const resTags = [
-      {
-        name: "name",
-        count: 1,
-        hasSynonyms: false,
-        isRequired: false,
-        page: 1,
-      },
-      {
-        name: "name",
-        count: 1,
-        hasSynonyms: false,
-        isRequired: false,
-        page: 1,
-      },
-      {
-        name: "name",
-        count: 1,
-        hasSynonyms: false,
-        isRequired: false,
-        page: 1,
-      },
-    ];
-    function timeout(ms: number) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
+  const getTags = async (changeOfSorting: boolean) => {
+    if (
+      !changeOfSorting &&
+      tags.findIndex((tag) => tag.page === currentPage) !== -1
+    )
+      return; //FIX BUG HERE
+    console.log("fetching tags");
+    try {
+      console.log("fetching tags");
+      setLoading(true);
+      const [resTags, hasMore] = await fetchTags(
+        currentPage,
+        itemsPerPage,
+        sorting,
+        sortBy
+      );
+      console.log(resTags);
+      dispatch(setTags({ tags: resTags, hasMore }));
+      setLoading(false);
+    } catch (error: any) {
+      setError(error.message);
     }
-    await timeout(2000);
-    dispatch(setTags(resTags));
-    setLoading(false);
   };
   useEffect(() => {
-    getTags();
+    getTags(false);
   }, [currentPage]);
-  useEffect(() => {
-    console.log("loading", loading);
-  }, [loading]);
+
   useEffect(() => {
     dispatch(resetTags());
     dispatch(setPageNumber(1));
-    getTags();
+    getTags(true);
   }, [sortBy, sorting, itemsPerPage]);
 
   return (
@@ -69,7 +56,7 @@ const TagList = () => {
         (loading || error) && "justify-center items-center"
       }`}
     >
-      {loading && <PropagateLoader color="#9353D3" />}
+      {!error && loading && <PropagateLoader color="#9353D3" />}
       {error && (
         <div className="flex items-center gap-4">
           <Skull />
@@ -77,11 +64,17 @@ const TagList = () => {
         </div>
       )}
 
-      {tags
-        .filter((tag) => tag.page === currentPage)
-        .map((el, i) => (
-          <Tag tag={el} index={(currentPage - 1) * itemsPerPage + (i + 1)} />
-        ))}
+      {!loading &&
+        !error &&
+        tags
+          .filter((tag) => tag.page === currentPage)
+          .map((el, i) => (
+            <Tag
+              key={el.name + String(el.popularity)}
+              tag={el}
+              index={(currentPage - 1) * itemsPerPage + (i + 1)}
+            />
+          ))}
     </div>
   );
 };
