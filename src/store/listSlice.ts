@@ -23,7 +23,7 @@ const initialState: initialStateType = {
   itemsPerPage: 30,
   sorting: "desc",
   sortBy: "name",
-  hasMore: true,
+  hasMore: false,
 };
 
 const listSlice = createSlice({

@@ -14,7 +14,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <NextUIProvider>
-        <main className="dark text-foreground bg-background">
+        <main className="dark text-foreground bg-[#000214]">
           <App />
         </main>
       </NextUIProvider>
