@@ -31,7 +31,6 @@ const listSlice = createSlice({
   initialState,
   reducers: {
     setTags: (state, action) => {
-      console.log(action.payload);
       state.hasMore = action.payload.hasMore;
       state.tags = [
         ...state.tags,
@@ -51,8 +50,10 @@ const listSlice = createSlice({
               ) === -1
           ),
       ];
+      console.log(state.tags);
     },
     setSortBy: (state, action) => {
+      console.log(action.payload);
       state.sortBy = action.payload;
     },
     setSortingType: (state, action) => {

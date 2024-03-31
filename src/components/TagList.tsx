@@ -17,38 +17,30 @@ const TagList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getTags = async (changeOfSorting: boolean) => {
-    if (
-      !changeOfSorting &&
-      tags.findIndex((tag) => tag.page === currentPage) !== -1
-    )
-      return; //FIX BUG HERE
-    console.log("fetching tags");
-    try {
-      console.log("fetching tags");
-      setLoading(true);
-      const [resTags, hasMore] = await fetchTags(
-        currentPage,
-        itemsPerPage,
-        sorting,
-        sortBy
-      );
-      console.log(resTags);
-      dispatch(setTags({ tags: resTags, hasMore }));
-      setLoading(false);
-    } catch (error: any) {
-      setError(error.message);
-    }
-  };
   useEffect(() => {
-    getTags(false);
-  }, [currentPage]);
+    (async () => {
+      if (tags.findIndex((tag) => tag.page === currentPage) !== -1) return;
+      try {
+        setLoading(true);
+        const [resTags, hasMore] = await fetchTags(
+          currentPage,
+          itemsPerPage,
+          sorting,
+          sortBy
+        );
 
-  useEffect(() => {
-    dispatch(resetTags());
-    dispatch(setPageNumber(1));
-    getTags(true);
-  }, [sortBy, sorting, itemsPerPage]);
+        dispatch(setTags({ tags: resTags, hasMore }));
+
+        setLoading(false);
+      } catch (error: any) {
+        setError(error.message);
+      }
+    })();
+  }, [currentPage, sortBy, sorting, itemsPerPage]);
+
+  // useEffect(() => {
+  //   getTags(true);
+  // }, [sortBy, sorting, itemsPerPage]);
 
   return (
     <div

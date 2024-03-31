@@ -13,7 +13,15 @@ import {
 } from "@nextui-org/react";
 import { ArrowCircleDown, ArrowCircleUp } from "@phosphor-icons/react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { setItemsPerPage, setSortBy, setSortingType } from "../store/listSlice";
+import {
+  resetTags,
+  setItemsPerPage,
+  setPageNumber,
+  setSortBy,
+  setSortingType,
+} from "../store/listSlice";
+import CustomSwitch from "./ui/filtering/SortingSwitch";
+import SortingNumberInput from "./ui/filtering/SortingNumberInput";
 
 const fields = ["popularity", "name"];
 
@@ -22,37 +30,50 @@ const Filtering = () => {
   const itemsPerPage = useAppSelector((state) => state.list.itemsPerPage);
   const sortBy = useAppSelector((state) => state.list.sortBy);
   const sorting = useAppSelector((state) => state.list.sorting);
-  const [error, setError] = useState<boolean>(false);
+  const [numberInputError, setNumberInputError] = useState<boolean>(false);
+
+  const reset = () => {
+    dispatch(resetTags());
+    dispatch(setPageNumber(1));
+  };
+
   const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (value === "") {
-      setError(true);
+      setNumberInputError(true);
       return;
     }
     const parsedValue = parseInt(value);
     if (parsedValue < 10 || parsedValue > 100) {
-      setError(true);
+      setNumberInputError(true);
       return;
     }
-    setError(false);
+    setNumberInputError(false);
+    reset();
     dispatch(setItemsPerPage(parsedValue));
+  };
+
+  const handleSortBySelectChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    reset();
+    dispatch(setSortBy(e.target.value));
+  };
+
+  const handleSortingTypeChange = (value: boolean) => {
+    reset();
+    dispatch(setSortingType(value ? "desc" : "asc"));
   };
   return (
     <>
       <div className="w-1/2 gap-4  px-8 hidden md:flex">
         <div className="flex items-center gap-2">
           <p className="whitespace-nowrap text-white/40">Per page</p>
-          <Input
-            type="number"
-            variant="bordered"
-            min={10}
-            max={80}
-            step={10}
-            value={String(itemsPerPage)}
-            onChange={handleItemsPerPageChange}
-            className="w-16"
-            color={error ? "danger" : "primary"}
-          ></Input>
+          <SortingNumberInput
+            itemsPerPage={itemsPerPage}
+            error={numberInputError}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
         </div>
         <div className="flex items-center gap-2">
           <p className="whitespace-nowrap text-white/40">Sort by:</p>
@@ -62,28 +83,16 @@ const Filtering = () => {
             className="w-[100px] "
             variant="bordered"
             selectedKeys={[sortBy]}
-            onChange={(e) => dispatch(setSortBy(e.target.value))}
+            onChange={handleSortBySelectChange}
           >
             {fields.map((field) => (
               <SelectItem key={field}>{field}</SelectItem>
             ))}
           </Select>
-          <Switch
-            defaultSelected
-            size="lg"
-            color="secondary"
-            isSelected={sorting === "desc"}
-            onValueChange={(e) => dispatch(setSortingType(e ? "desc" : "asc"))}
-            thumbIcon={({ isSelected, className }) =>
-              isSelected ? (
-                <ArrowCircleDown size={32} className={className} />
-              ) : (
-                <ArrowCircleUp size={32} className={className} />
-              )
-            }
-          >
-            {sorting[0].toUpperCase() + sorting.slice(1)}
-          </Switch>
+          <CustomSwitch
+            sorting={sorting}
+            onSwitchChange={handleSortingTypeChange}
+          />
         </div>
         <div className="flex items-center gap-2"></div>
       </div>
@@ -101,23 +110,18 @@ const Filtering = () => {
         <DropdownMenu variant="faded" aria-label="Static Actions">
           <DropdownSection title="Amount of items" showDivider>
             <DropdownItem isReadOnly={true}>
-              <Input
-                type="number"
-                variant="bordered"
-                min={10}
-                max={80}
-                step={10}
-                value={String(itemsPerPage)}
-                onChange={handleItemsPerPageChange}
-                className="w-16 text-white"
-                color={error ? "danger" : "default"}
-              ></Input>
+              <SortingNumberInput
+                error={numberInputError}
+                itemsPerPage={itemsPerPage}
+                onItemsPerPageChange={handleItemsPerPageChange}
+              />
             </DropdownItem>
           </DropdownSection>
           <DropdownSection title="Sorting">
             <DropdownItem className="flex gap-2">
               {fields.map((field) => (
                 <Button
+                  key={field}
                   size="sm"
                   className="mx-1"
                   onClick={() => dispatch(setSortBy(field))}
@@ -128,24 +132,10 @@ const Filtering = () => {
               ))}
             </DropdownItem>
             <DropdownItem>
-              <Switch
-                defaultSelected
-                size="lg"
-                color="secondary"
-                isSelected={sorting === "desc"}
-                onValueChange={(e) =>
-                  dispatch(setSortingType(e ? "desc" : "asc"))
-                }
-                thumbIcon={({ isSelected, className }) =>
-                  isSelected ? (
-                    <ArrowCircleDown size={32} className={className} />
-                  ) : (
-                    <ArrowCircleUp size={32} className={className} />
-                  )
-                }
-              >
-                {sorting[0].toUpperCase() + sorting.slice(1)}
-              </Switch>
+              <CustomSwitch
+                sorting={sorting}
+                onSwitchChange={handleSortingTypeChange}
+              />
             </DropdownItem>
           </DropdownSection>
         </DropdownMenu>
