@@ -50,10 +50,8 @@ const listSlice = createSlice({
               ) === -1
           ),
       ];
-      console.log(state.tags);
     },
     setSortBy: (state, action) => {
-      console.log(action.payload);
       state.sortBy = action.payload;
     },
     setSortingType: (state, action) => {

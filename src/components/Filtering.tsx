@@ -66,7 +66,7 @@ const Filtering = () => {
   };
   return (
     <>
-      <div className="w-1/2 gap-4  px-8 hidden md:flex">
+      <div className="w-1/2 gap-4  px-8  hidden md:flex">
         <div className="flex items-center gap-2">
           <p className="whitespace-nowrap text-white/40">Per page</p>
           <SortingNumberInput
@@ -124,7 +124,12 @@ const Filtering = () => {
                   key={field}
                   size="sm"
                   className="mx-1"
-                  onClick={() => dispatch(setSortBy(field))}
+                  onClick={() =>
+                    sortBy !== field &&
+                    handleSortBySelectChange({
+                      target: { value: field },
+                    } as any)
+                  }
                   color={sortBy === field ? "secondary" : "default"}
                 >
                   {field}

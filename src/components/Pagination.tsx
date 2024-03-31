@@ -16,9 +16,10 @@ const PagesNav = () => {
   return (
     <div className="p-b-8 w-full flex justify-center items-center h-20 gap-6">
       <Button
-        variant="flat"
+        variant={currentPage === 1 ? "flat" : "shadow"}
         color="secondary"
         onPress={() => handleNextPage("prev")}
+        disabled={currentPage === 1}
       >
         Previous
       </Button>
@@ -26,7 +27,7 @@ const PagesNav = () => {
         {currentPage}
       </div>
       <Button
-        variant="flat"
+        variant={hasMore ? "shadow" : "flat"}
         color="secondary"
         disabled={!hasMore}
         onPress={() => handleNextPage("next")}

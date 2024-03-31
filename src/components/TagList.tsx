@@ -38,13 +38,9 @@ const TagList = () => {
     })();
   }, [currentPage, sortBy, sorting, itemsPerPage]);
 
-  // useEffect(() => {
-  //   getTags(true);
-  // }, [sortBy, sorting, itemsPerPage]);
-
   return (
     <div
-      className={`overflow-y-scroll h-[100%] w-[100%] p-8 flex flex-wrap gap-4 mr-2 ${
+      className={`overflow-y-scroll h-[100%] w-[100%] px-8 mt-8 flex sm:flex-wrap gap-4  flex-col sm:flex-row ${
         (loading || error) && "justify-center items-center"
       }`}
     >
