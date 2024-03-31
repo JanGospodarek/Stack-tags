@@ -1,7 +1,6 @@
-import { Button, Pagination } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setPageNumber } from "../store/listSlice";
-import { useEffect, useState } from "react";
 const PagesNav = () => {
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector((state) => state.list.page);

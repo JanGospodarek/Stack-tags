@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import fetchTags from "../utils/fetchTags";
-import { resetTags, setPageNumber, setTags } from "../store/listSlice";
-import compare from "../utils/compareStringsOrNumbers";
+import { setTags } from "../store/listSlice";
 import Tag from "./Tag";
 import { PropagateLoader } from "react-spinners";
 import Skull from "./svgs/Skull";

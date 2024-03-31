@@ -6,12 +6,9 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
-  Input,
   Select,
   SelectItem,
-  Switch,
 } from "@nextui-org/react";
-import { ArrowCircleDown, ArrowCircleUp } from "@phosphor-icons/react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   resetTags,
