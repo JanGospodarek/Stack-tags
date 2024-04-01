@@ -32,7 +32,12 @@ const TagList = () => {
 
         setLoading(false);
       } catch (error: any) {
-        setError(error.message);
+        if (!error.message) setError("Network request failed!");
+        else
+          setError(
+            "ERROR:" + error.message[0].toUpperCase() + error.message.slice(1)
+          );
+
         dispatch(setHasMore(false));
       }
     })();
@@ -46,7 +51,7 @@ const TagList = () => {
     >
       {!error && loading && <PropagateLoader color="#9353D3" />}
       {error && (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-col sm:flex-row">
           <Skull />
           <p className="font-bold text-gray-600">{error}</p>
         </div>
