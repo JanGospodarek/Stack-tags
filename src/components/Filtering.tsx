@@ -24,30 +24,12 @@ const fields = ["popularity", "name"];
 
 const Filtering = () => {
   const dispatch = useAppDispatch();
-  const itemsPerPage = useAppSelector((state) => state.list.itemsPerPage);
   const sortBy = useAppSelector((state) => state.list.sortBy);
   const sorting = useAppSelector((state) => state.list.sorting);
-  const [numberInputError, setNumberInputError] = useState<boolean>(false);
 
   const reset = () => {
     dispatch(resetTags());
     dispatch(setPageNumber(1));
-  };
-
-  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (value === "") {
-      setNumberInputError(true);
-      return;
-    }
-    const parsedValue = parseInt(value);
-    if (parsedValue < 10 || parsedValue > 100) {
-      setNumberInputError(true);
-      return;
-    }
-    setNumberInputError(false);
-    reset();
-    dispatch(setItemsPerPage(parsedValue));
   };
 
   const handleSortBySelectChange = (
@@ -66,11 +48,7 @@ const Filtering = () => {
       <div className="w-1/2 gap-4  px-8  hidden md:flex">
         <div className="flex items-center gap-2">
           <p className="whitespace-nowrap text-white/40">Per page</p>
-          <SortingNumberInput
-            itemsPerPage={itemsPerPage}
-            error={numberInputError}
-            onItemsPerPageChange={handleItemsPerPageChange}
-          />
+          <SortingNumberInput resetTags={reset} />
         </div>
         <div className="flex items-center gap-2">
           <p className="whitespace-nowrap text-white/40">Sort by:</p>
@@ -107,11 +85,7 @@ const Filtering = () => {
         <DropdownMenu variant="faded" aria-label="Static Actions">
           <DropdownSection title="Amount of items" showDivider>
             <DropdownItem isReadOnly={true}>
-              <SortingNumberInput
-                error={numberInputError}
-                itemsPerPage={itemsPerPage}
-                onItemsPerPageChange={handleItemsPerPageChange}
-              />
+              <SortingNumberInput resetTags={reset} />
             </DropdownItem>
           </DropdownSection>
           <DropdownSection title="Sorting">
