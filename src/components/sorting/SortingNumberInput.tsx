@@ -1,7 +1,7 @@
 import { Input } from "@nextui-org/react";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setItemsPerPage } from "../../../store/listSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { setItemsPerPage } from "../../store/listSlice";
 interface Props {
   resetTags: () => void;
 }
@@ -35,7 +35,7 @@ const SortingNumberInput = ({ resetTags }: Props) => {
       step={10}
       value={String(itemsPerPage)}
       onChange={handleItemsPerPageChange}
-      className="w-16 text-white"
+      className="w-16 dark:text-white"
       color={error ? "danger" : "default"}
     ></Input>
   );

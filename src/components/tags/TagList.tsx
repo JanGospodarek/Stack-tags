@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import fetchTags from "../utils/fetchTags";
-import { setTags } from "../store/listSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import fetchTags from "../../utils/fetchTags";
+import { setHasMore, setTags } from "../../store/listSlice";
 import Tag from "./Tag";
 import { PropagateLoader } from "react-spinners";
-import Skull from "./svgs/Skull";
+import Skull from "../svgs/Skull";
 const TagList = () => {
   const dispatch = useAppDispatch();
   const tags = useAppSelector((state) => state.list.tags);
@@ -33,6 +33,7 @@ const TagList = () => {
         setLoading(false);
       } catch (error: any) {
         setError(error.message);
+        dispatch(setHasMore(false));
       }
     })();
   }, [currentPage, sortBy, sorting, itemsPerPage]);
@@ -59,7 +60,7 @@ const TagList = () => {
             <Tag
               key={el.name + String(el.popularity)}
               tag={el}
-              index={(currentPage - 1) * itemsPerPage + (i + 1)}
+              tagIndex={(currentPage - 1) * itemsPerPage + (i + 1)}
             />
           ))}
     </div>

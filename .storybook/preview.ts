@@ -23,11 +23,6 @@ const preview: Preview = {
       Provider: NextUIProvider,
       defaultTheme: "dark",
     }),
-    (Story: () => React.ReactElement) => (
-      <Provider store={store}>
-        <Story />
-      </Provider>
-    ),
   ],
 };
 
