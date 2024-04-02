@@ -34,7 +34,6 @@ const listSlice = createSlice({
               ) === -1
           ),
       ];
-      console.log(state.tags);
     },
     setSortBy: (state, action) => {
       state.sortBy = action.payload;

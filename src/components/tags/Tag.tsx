@@ -11,15 +11,15 @@ const Tag = (props: { tag: TagType; tagIndex: number }) => {
       </div>
       <div className="flex flex-col gap-1 mt-2">
         <div className="flex justify-between gap-2 items-center">
-          <p className="text-sm text-slate-300/60">Popularity:</p>
+          <p className="text-sm dark:text-slate-300/60">Popularity:</p>
           <p>{popularity}</p>
         </div>
         <div className="flex justify-between gap-2">
-          <p className="text-sm text-slate-300/60">Has Synonyms:</p>
+          <p className="text-sm dark:text-slate-300/60">Has Synonyms:</p>
           <p>{hasSynonyms ? "Yes" : "No"}</p>
         </div>
         <div className="flex justify-between gap-2">
-          <p className="text-sm text-slate-300/60">Required:</p>
+          <p className="text-sm dark:text-slate-300/60">Required:</p>
           <p>{isRequired ? "Yes" : "No"}</p>
         </div>
       </div>
